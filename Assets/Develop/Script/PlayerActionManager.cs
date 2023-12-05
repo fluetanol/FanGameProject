@@ -7,27 +7,19 @@ using UnityEngine.InputSystem;
 
 public class PlayerActionManager : MonoBehaviour
 {
-    [SerializeField] private int _moveSpeed = 5;
+    [SerializeField] private int _moveSpeed = 4;
+    [SerializeField] private int _maxSpeed = 10;
     [SerializeField] private int _jumpForce = 5;
     [SerializeField] private Rigidbody2D rigidbody2d;
     private Vector3 _moveDirection;
-    private bool _isLand = false;
+    private bool _isLand = true;
 
     void Start(){
     }
 
-    void Update()
-    {
-        bool hasControl = (_moveDirection != Vector3.zero);
-        if (hasControl) {
-            rigidbody2d.AddForce(_moveDirection * _moveSpeed, ForceMode2D.Force);
-        }
-
-    }
-
     void FixedUpdate() {
-        if (!_isLand && rigidbody2d.GetPointVelocity(transform.position) == Vector2.zero) _isLand = true;
-        print(rigidbody2d.GetPointVelocity(transform.position));
+        if (rigidbody2d.GetPointVelocity(transform.position).magnitude < _maxSpeed)
+            rigidbody2d.AddForce(_moveDirection * _moveSpeed, ForceMode2D.Force);
     }
     
     //Player Input Class Send Message
@@ -43,8 +35,12 @@ public class PlayerActionManager : MonoBehaviour
         float input = value.Get<float>();
         if(input==1 && _isLand){
             rigidbody2d.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
-            _isLand = false;
+            //_isLand = false;
         }
+    }
+
+    private void OnCollisionEnter(Collision other) {
+        print(other.contacts[0].normal);
     }
 
 }

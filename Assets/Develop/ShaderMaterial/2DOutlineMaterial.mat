@@ -134,7 +134,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _LineEmissionMagnitude: 1.92
+    - _LineEmissionMagnitude: 3
     - _Magnitude: 1.39
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -151,14 +151,14 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Thick: -0.1
+    - _Thick: 0.5
     - _UpDown: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
-    - _ColorMain: {r: 0.956295, g: 1, b: 0, a: 0}
+    - _ColorMain: {r: 1, g: 0.02821736, b: 0, a: 0}
     - _ColorPoint: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
