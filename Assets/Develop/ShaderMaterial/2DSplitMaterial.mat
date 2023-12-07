@@ -101,8 +101,8 @@ Material:
     - _Down: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EmissionMagnitude1: 1.01
-    - _EmissionMagnitude2: 1.5
+    - _EmissionMagnitude1: 1.66
+    - _EmissionMagnitude2: 1.55
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -114,7 +114,7 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Right: 0.69
+    - _Right: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -128,7 +128,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorMain: {r: 1, g: 0, b: 0, a: 0}
+    - _ColorMain: {r: 1, g: 1, b: 1, a: 0}
     - _ColorSub: {r: 0.9749196, g: 1, b: 0.1462264, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
