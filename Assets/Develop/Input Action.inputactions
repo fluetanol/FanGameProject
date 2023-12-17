@@ -62,7 +62,7 @@
                     "name": "",
                     "id": "0157bcf3-28af-4e0f-afa9-95fa90462168",
                     "path": "<Keyboard>/space",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2),Press(behavior=1)",
                     "processors": "",
                     "groups": "PC",
                     "action": "Jump",
