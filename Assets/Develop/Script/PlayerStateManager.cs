@@ -15,20 +15,30 @@ public class PlayerStateManager : Singleton<PlayerStateManager>
 {
     [SerializeField] private GameObject player;
     private PlayerState _state;
+    private Rigidbody2D _rigidbody2d;
+    private Animator _animator;
+
+    void Start(){
+        _rigidbody2d = player.GetComponent<Rigidbody2D>();
+        _animator = player.GetComponent<Animator>();
+    }
 
     void Update(){
         if(_state == PlayerState.Dead){
-            /*
-            if (!_fadeinout.enabled) _fadeinout.enabled = true;
-            if (_rigidbody2d.simulated)
-            {
-                _rigidbody2d.simulated = false;
-                _fadeinout.Play("FadeIn");
-                _fadeinout.Rebind();
-            }*/
+            DeadState();
         }
 
 
+    }
+
+    private void DeadState(){
+        if (!_animator.enabled)_animator.enabled = true;
+        if (_rigidbody2d.simulated)
+        {
+            _rigidbody2d.simulated = false;
+            _animator.Play("FadeIn");
+            _animator.Rebind();
+        }
     }
 
 

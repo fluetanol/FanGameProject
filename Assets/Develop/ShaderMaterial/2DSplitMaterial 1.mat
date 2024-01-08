@@ -101,7 +101,7 @@ Material:
     - _Down: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EmissionMagnitude1: 1.39
+    - _EmissionMagnitude1: 1.27
     - _EmissionMagnitude2: 3
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
