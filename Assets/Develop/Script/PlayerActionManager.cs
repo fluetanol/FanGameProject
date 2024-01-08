@@ -1,111 +1,111 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Entities.UniversalDelegates;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerActionManager : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 4;
-    [SerializeField] private float _moveMaxSpeed = 10;
-    [SerializeField] private float _jumpForce = 5;
-    [SerializeField] private float _ySlope = 0.5f;
-    [SerializeField] private Rigidbody2D _rigidBody2d;
-    [SerializeField] private Transform Raypoint;
+    public float Speed;
+    public float JumpV0;
+    public float Jumpadd;
+    private float _jump;
+    
+    [SerializeField] private Transform _deadLine;
+    [SerializeField] private Transform _startPoint;
+    [SerializeField] private Animator _fadeinout;
+    private Vector2 _moveDirection;
+    private Rigidbody2D _rigidbody2d;
 
-    private Vector2 _moveDirection =  new();
-    private Vector2 _velocity = new();
+    private bool _isLand;
+    private bool _isJump;
+    private bool _isJumpHold;
 
-    private float _jumpKeep = 0;
-    private bool _isLand = false;
-
-    private RaycastHit2D _specialLandHit;
-    private Vector2 _specialLandPoint = new();
+    void Start(){
+        _moveDirection = new();
+        _rigidbody2d = GetComponent<Rigidbody2D>();
+        _jump = Jumpadd;
+        _isJump = false;
+        _isLand = false;
+        _isJumpHold = false;
+    }
 
     void Update(){
-        CheckSpecialLand(Raypoint.position, 3, LayerMask.GetMask("SpecialTerrain"));
-
-    }
-    void FixedUpdate() {
-        SetMoveAccerlate(_moveSpeed, _moveMaxSpeed, _moveDirection);
-        _isLand = CheckLanding(_rigidBody2d.velocity.y) && CheckKeepJump(_jumpKeep, _isLand);
-    }
-
-    bool CheckLanding(float velocity_y){
-        if (velocity_y!=0) return false;
-        else return true;
-    }
-
-    bool CheckKeepJump(float keepkey, bool isLand){
-        if (keepkey != 0 && isLand){
-            _rigidBody2d.velocity = _rigidBody2d.velocity * 0.75f;
-            _rigidBody2d.AddForce(transform.up * _jumpForce, ForceMode2D.Impulse);
-            return false;
-        }
-        else return true;
-    }
-
-
-    void SetMoveAccerlate(float speed, float maxSpeed, Vector2 direction){
-        if (_rigidBody2d.velocity.magnitude<1) _rigidBody2d.AddForce(speed*direction*Time.deltaTime * 2, ForceMode2D.Impulse);
-        else _rigidBody2d.AddForce(speed * direction * Time.deltaTime, ForceMode2D.Impulse);
+        if(transform.position.y < _deadLine.position.y) PlayerStateManager.Instance.SetState(PlayerState.Dead);
         
-        if(Mathf.Abs(_rigidBody2d.velocity.x) >= maxSpeed){
-            _velocity.y = _rigidBody2d.velocity.y;
-            _velocity.x = Mathf.Abs(_rigidBody2d.velocity.x)/ _rigidBody2d.velocity.x * maxSpeed;
-            _rigidBody2d.velocity = _velocity;
-        }
     }
 
-    void CheckSpecialLand(Vector3 position, float checkDistance, int layerMask){
-        RaycastHit2D downHit = Physics2D.Raycast(position, -Vector2.up, checkDistance, layerMask);
-        if(_specialLandHit == false)
-            print("!");
-
-        if(downHit.transform != null)
-        {
-            _specialLandHit = downHit;
-            _specialLandPoint = downHit.point;
-
-            float d = Vector2.Distance(position, _specialLandPoint);
-            if (d < 1) downHit.collider.isTrigger = false;
-            else downHit.collider.isTrigger = true;
-        }
+    void FixedUpdate() {
+        normalMove();
+        jumpMove();
+        _rigidbody2d.velocity = _moveDirection;
+        //PlayerStateManager.Instance;
+    }
+    
+    public void Restart(){
+        transform.position = _startPoint.position;
+        _rigidbody2d.simulated = true;
+        _rigidbody2d.velocity = Vector2.zero;
     }
 
+    void normalMove(){
+        if (_moveDirection.x != 0) _moveDirection.x = _moveDirection.x / Mathf.Abs(_moveDirection.x) * Speed;
+    }
+
+    void jumpMove(){
+        if (_isJumpHold) {
+            _rigidbody2d.gravityScale = 2;
+            _moveDirection.y += Jumpadd * Time.deltaTime;
+            Jumpadd-=1;
+            if(Jumpadd<=0) _isJumpHold = false;
+        }
+        else{
+            _rigidbody2d.gravityScale = 5;
+             _moveDirection.y = _rigidbody2d.velocity.y;
+        }
+    }
 
     //Player Input Send Messaged Event
     void OnMove(InputValue value){
         Vector2 input = value.Get<Vector2>();
-        if(input!=null) _moveDirection.x = input.x;
+        if(input!=null)  _moveDirection.x = input.x;
     }
 
+    //press == 1
+    //unpress = 0
     void OnJump(InputValue value){
-        print(value.Get<float>());
-        _jumpKeep = value.Get<float>();
-        //_isLand = CheckKeepJump(_jumpKeep,_isLand);
+        print(_isJump+" "+_isLand);
+        if(value.isPressed && !_isJump && _isLand){
+            print("press");
+            _moveDirection.y = JumpV0;
+            _isLand = false;
+            _isJump = true;
+            _isJumpHold = true;
+        }
+        else{
+            print("depress");
+            _isJumpHold = false;
+            Jumpadd = _jump;
+        }
+
     }
 
-    //collide Event
     void OnCollisionEnter2D(Collision2D other) {
-        foreach(var k in other.contacts){
-            print(k.collider.name);
-            if(k.normal.y<=1 && k.normal.y>_ySlope){
+        foreach(var hit in other.contacts){
+            if(hit.normal == Vector2.up){
+                _isJump = false;
                 _isLand = true;
                 break;
             }
         }
-    }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Coin"){
-            Destroy(other.gameObject);
-        }
-        
     }
-
+    
 
 
 }

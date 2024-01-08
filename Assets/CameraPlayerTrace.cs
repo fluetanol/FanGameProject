@@ -22,7 +22,7 @@ public class CameraPlayerTrace : MonoBehaviour
     private void Update()
     {
         realLocation = targetPosition.position;
-        realLocation.y = targetPosition.position.y + 1;
+        realLocation.y = targetPosition.position.y + 2;
         realLocation.z = cameraToTargetDistance;
 
         if (isActive) transform.position = Vector3.SmoothDamp(transform.position, realLocation, ref _velocity, smoothTime);
