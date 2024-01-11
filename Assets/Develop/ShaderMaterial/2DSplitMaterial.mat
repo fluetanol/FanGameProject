@@ -98,7 +98,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Down: 0
+    - _Down: 2
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EmissionMagnitude1: 1.79
@@ -107,7 +107,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Left: 1.82
+    - _Left: 2
     - _Magnitude: 2.19
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -121,7 +121,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Up: 1.88
+    - _Up: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     - _move: -0
