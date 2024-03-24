@@ -54,6 +54,13 @@ public class PlayerActionManager : MonoBehaviour
 
     }
 
+    void OnClick(InputValue value){
+        print("!");
+
+    }
+
+
+
     void OnCollisionEnter2D(Collision2D other) {
         foreach(var hit in other.contacts){
             if(hit.normal == Vector2.up){
